@@ -8,6 +8,7 @@ This app can be used as the websocket and http server for the chat-land web app
 ## Installation
 - Download or clone the repo
 - run `npm install`
+- create a mysql database named 'node_ws_chat_db' and import the db backup from the db folder
 - run `npm index.js` or `nodemon`
 - the server will be running on port 1337
 
