@@ -1,0 +1,28 @@
+{
+  "name": "node-chat",
+  "version": "1.0.0",
+  "description": "simple chat app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arhanashik/node-ws-chat.git"
+  },
+  "author": "Arhan ashik",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/arhanashik/node-ws-chat/issues"
+  },
+  "homepage": "https://github.com/arhanashik/node-ws-chat#readme",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4",
+    "http": "0.0.0",
+    "md5": "^2.2.1",
+    "mysql": "^2.16.0",
+    "uniqid": "^5.0.3",
+    "websocket": "^1.0.28"
+  }
+}
