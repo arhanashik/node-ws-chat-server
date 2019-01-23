@@ -95,8 +95,8 @@ function sendMessage(req, res) {
             res.end(JSON.stringify({success: false, message: 'receiver is offline'}))
         }
     
-        wsMessageHandler.sendMessage(connection, user, receiver, message, new Date())
-        res.end(JSON.stringify({success: true, message: `message sent to ${receiver.name}`}))
+        wsMessageHandler.sendMessage(connection, user, receiver.user, message, new Date())
+        res.end(JSON.stringify({success: true, message: `message sent to ${receiver.user.name}`}))
     }, error => {
         log.error(error)
         res.end(JSON.stringify({success: false, message: error}))

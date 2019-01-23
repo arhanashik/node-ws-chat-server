@@ -24,7 +24,7 @@ function sayWelcome(connection, sessionId) {
 //save the message to the mysql db
 function saveToDb(sender, receiver, message) {
     messageDb.save(sender, receiver, htmlEntityFilter.filter(message)).then(result => {
-        log.info('messaged saved to db')
+        log.info('message saved to db')
     }, (error) => {
         log.error(error)
     })
