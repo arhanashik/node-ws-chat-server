@@ -47,7 +47,7 @@ function sendMessage(connection, sender, receiver, message, time) {
 }
 
 //broadcast message to all online connections
-function sendToAll(connections, sender, message) {
+function sendUTFToAll(sender, message) {
     saveToDb(sender.id, 'broadcast', message)
 
     var time = new Date()
@@ -65,11 +65,28 @@ function sendToAll(connections, sender, message) {
     }
 }
 
-//send the chat history to the client
+//broadcast connection to all online connections
+function sendConnectionToAll(connection, status) {
+
+    var time = new Date()
+    var data = {
+        time: time,
+        connection: connection,
+        status: status
+    }
+
+    for (var i = 0; i < connections.length; i++) {
+        connections[i].connection.sendUTF(
+            JSON.stringify({type: 'connection', data: data})
+        )
+    }
+}
+
+//send the chat history and online users list to the client
 function sendHistory(connection, user) {
     messageDb.allBroadcast().then(result => {
         connection.sendUTF(
-            JSON.stringify({type: 'history', user: user, data: result})
+            JSON.stringify({type: 'history', user: user, online_users: activeUsers, data: result})
         )
     }, (error) => {
         sendError(connection, error)
@@ -86,7 +103,8 @@ function sendError(connection, error) {
 module.exports = {
     sayWelcome: sayWelcome,
     sendMessage: sendMessage,
-    sendToAll: sendToAll,
+    sendUTFToAll: sendUTFToAll,
+    sendConnectionToAll: sendConnectionToAll,
     sendHistory: sendHistory,
     sendError: sendError
 }

@@ -49,12 +49,16 @@ function onRequest(request) {
 
                     //check authentication
                     authenticator.authenticate(email, password).then((user) => {
-                        //add tp online user list
+                        //add to online user list
                         connectionHandler.addUser(sessionId, user)
+                        //send new connation to all
+                        wsMessageHandler.sendConnectionToAll(
+                            connectionHandler.getUser(sessionId), 'connect'
+                        )
                         //send previous history
                         wsMessageHandler.sendHistory(connection, user)
                     }, (err) => {
-                        wsMessageHandler.sendError(connection, err)
+                        wsMessageHandler.sendError(connection, 'authentication failed')
                     })
                     break
                     
@@ -65,7 +69,7 @@ function onRequest(request) {
 
                     if(sender !== false) {
                         //broadcast message
-                        wsMessageHandler.sendToAll(connections, sender, json.message)
+                        wsMessageHandler.sendUTFToAll(sender.user, json.message)
                     } else {
                         wsMessageHandler.sendError(connection, 'session expired')
                     }
@@ -83,6 +87,10 @@ function onRequest(request) {
     connection.on('close', function(reasonCode, description) {
         log.error(`Peer ${connection.remoteAddress} disconnected`)
         log.error(`reasonCode: ${reasonCode}, reason: ${description}`)
+        //send dead connation status to all
+        var deadConnection = connectionHandler.getUserWithRemoteAddress(connection.remoteAddress)
+        if(deadConnection !== false) wsMessageHandler.sendConnectionToAll(deadConnection,
+            'disconnect')
         //remove connection and the related online user
         connectionHandler.removeConnection(connection.remoteAddress)
     })

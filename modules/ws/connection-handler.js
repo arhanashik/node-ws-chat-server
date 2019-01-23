@@ -14,7 +14,26 @@ function getConnection (sessionId) {
 //return the online user for any session or or false
 function getUser(sessionId) {
     for(var i = 0; i < activeUsers.length; i++) {
-        if (activeUsers[i].session_id === sessionId) return activeUsers[i].user
+        if (activeUsers[i].session_id === sessionId) return activeUsers[i]
+    }
+
+    return false
+}
+
+function getUserWithRemoteAddress(remoteAddress) {
+    var sessionId = false
+
+    //check the connection exists using remoteAddress
+    for(var i = 0; i < connections.length; i++) {
+        if (connections[i].connection.remoteAddress === remoteAddress) {
+            sessionId = connections[i].session_id
+            break
+        }
+    }
+
+    //check the user with the session id
+    for(var i = 0; i < activeUsers.length; i++) {
+        if (activeUsers[i].session_id === sessionId) return activeUsers[i]
     }
 
     return false
@@ -77,6 +96,7 @@ function removeConnection(remoteAddress) {
 module.exports = {
     getConnection: getConnection,
     getUser: getUser,
+    getUserWithRemoteAddress: getUserWithRemoteAddress,
     addUser: addUser,
     addConnection: addConnection,
     removeConnection: removeConnection
